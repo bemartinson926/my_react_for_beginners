@@ -9,8 +9,9 @@ class App extends React.Component {
   constructor() {
     super();
 
-    this.addFish = this.addFish.bind(this);
+    this.addFish     = this.addFish.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
+    this.addToOrder  = this.addToOrder.bind(this);
 
     this.state = {
       fishes: {},
@@ -32,6 +33,15 @@ class App extends React.Component {
     });
   }
 
+  addToOrder(key) {
+    // copy state
+    const order = {...this.state.order};
+    // update or add the new number of fish ordered
+    order[key] = (order[key] + 1) || 1;
+    // update state
+    this.setState({ order });
+  }
+
   render() {
     const fishKeys = Object.keys(this.state.fishes);
 
@@ -43,7 +53,13 @@ class App extends React.Component {
             {
               fishKeys.length ?
                 fishKeys.map((fish) => {
-                  return <Fish key={fish} details={this.state.fishes[fish]} />;
+                  return (
+                    <Fish
+                      key={fish}
+                      index={fish}
+                      details={this.state.fishes[fish]}
+                      addToOrder={this.addToOrder} />
+                  )
                 })
               :
                 <p>No fIsh</p>
